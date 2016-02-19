@@ -1,0 +1,402 @@
+<html>
+<head>
+<title>indexRSS.jsp</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(249,39,114); }
+.s1 { color: rgb(246,246,246); }
+.s2 { color: rgb(254,151,32); }
+.s3 { color: rgb(230,218,116); }
+.s4 { color: rgb(249,250,244); }
+.s5 { color: rgb(128,128,128); }
+.s6 { color: rgb(174,129,255); }
+</style>
+</head>
+<BODY BGCOLOR="#272822">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+indexRSS.jsp</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">&lt;html&gt;</span><span class="s1"> 
+ 
+</span><span class="s0">&lt;head&gt;</span><span class="s1"> 
+ 
+    </span><span class="s0">&lt;script </span><span class="s2">type=</span><span class="s3">&quot;text/javascript&quot; </span><span class="s2">src=</span><span class="s3">&quot;https://www.google.com/jsapi&quot;</span><span class="s0">&gt;&lt;/script&gt;</span><span class="s1"> 
+    </span><span class="s0">&lt;script </span><span class="s2">type=</span><span class="s3">&quot;text/javascript&quot;</span><span class="s0">&gt;&lt;/script&gt;</span><span class="s1"> 
+    </span><span class="s0">&lt;script </span><span class="s2">src=</span><span class="s3">&quot;http://canvasjs.com/assets/script/canvasjs.min.js&quot;</span><span class="s0">&gt;&lt;/script&gt;</span><span class="s1"> 
+    </span><span class="s0">&lt;script </span><span class="s2">src=</span><span class="s3">&quot;/Users/elenabugercuk/IdeaProjects/proff29/node_modules/ramda/dist/ramda.js&quot;</span><span class="s0">&gt;&lt;/script&gt;</span><span class="s1"> 
+ 
+</span><span class="s0">&lt;/head&gt;</span><span class="s1"> 
+ 
+</span><span class="s0">&lt;body&gt;</span><span class="s1"> 
+</span><span class="s0">&lt;script&gt;</span><span class="s1"> 
+    google</span><span class="s0">.</span><span class="s1">load</span><span class="s4">(</span><span class="s3">&quot;feeds&quot;</span><span class="s0">, </span><span class="s3">&quot;1&quot;</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+    </span><span class="s0">var </span><span class="s1">R </span><span class="s0">= </span><span class="s1">require</span><span class="s4">(</span><span class="s3">&quot;ramda&quot;</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+</span><span class="s0">&lt;/script&gt;</span><span class="s1"> 
+ 
+ 
+ 
+</span><span class="s0">&lt;fieldset&gt;</span><span class="s1"> 
+    </span><span class="s0">&lt;legend&gt;</span><span class="s1">RSS Channels</span><span class="s0">&lt;/legend&gt;</span><span class="s1"> 
+    Add RSS to List: </span><span class="s0">&lt;input </span><span class="s2">type=</span><span class="s3">&quot;text&quot; </span><span class="s2">name=</span><span class="s3">&quot;txtCombo&quot; </span><span class="s2">id=</span><span class="s3">&quot;txtCombo&quot;</span><span class="s0">/&gt;</span><span class="s1"> 
+    </span><span class="s0">&lt;input </span><span class="s2">type=</span><span class="s3">&quot;button&quot; </span><span class="s2">value=</span><span class="s3">&quot;Add &quot; </span><span class="s2">onclick=</span><span class="s3">&quot;</span><span class="s1">addCombo</span><span class="s4">()</span><span class="s3">&quot;</span><span class="s0">&gt;</span><span class="s1"> 
+    </span><span class="s0">&lt;input </span><span class="s2">type=</span><span class="s3">&quot;button&quot; </span><span class="s2">value=</span><span class="s3">&quot;Delete &quot; </span><span class="s2">onclick=</span><span class="s3">&quot;</span><span class="s1">delCombo</span><span class="s4">()</span><span class="s3">&quot;</span><span class="s0">&gt;</span><span class="s1"> 
+    </span><span class="s0">&lt;br/&gt;</span><span class="s1"> 
+    Existing Channels : </span><span class="s0">&lt;select </span><span class="s2">name=</span><span class="s3">&quot;combo&quot; </span><span class="s2">id=</span><span class="s3">&quot;combo&quot;</span><span class="s0">&gt;&lt;/select&gt;</span><span class="s1"> 
+</span><span class="s0">&lt;/fieldset&gt;</span><span class="s1"> 
+ 
+ 
+    </span><span class="s0">&lt;script&gt;</span><span class="s1"> 
+ 
+        </span><span class="s0">var </span><span class="s1">currentRSS</span><span class="s0">=</span><span class="s3">&quot;&quot;</span><span class="s0">; </span><span class="s5">//url for current RSS Channel</span><span class="s1"> 
+        </span><span class="s0">var </span><span class="s1">count</span><span class="s0">=</span><span class="s6">0</span><span class="s0">; </span><span class="s5">//number of messages in Channel</span><span class="s1"> 
+        </span><span class="s0">var </span><span class="s1">auth</span><span class="s0">=</span><span class="s6">0</span><span class="s0">; </span><span class="s5">// number of uniq Author</span><span class="s1"> 
+        </span><span class="s0">var </span><span class="s1">mapAuth</span><span class="s0">=new </span><span class="s1">Array</span><span class="s4">()</span><span class="s0">; </span><span class="s5">// Array to find uniq Author</span><span class="s1"> 
+ 
+ 
+        </span><span class="s5">// Create 3 base Channels</span><span class="s1"> 
+        </span><span class="s0">var </span><span class="s1">select </span><span class="s0">= </span><span class="s1">document</span><span class="s0">.</span><span class="s1">createElement</span><span class="s4">(</span><span class="s3">&quot;select&quot;</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+        </span><span class="s0">var </span><span class="s1">combo </span><span class="s0">= </span><span class="s1">document</span><span class="s0">.</span><span class="s1">getElementById</span><span class="s4">(</span><span class="s3">&quot;combo&quot;</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+ 
+        </span><span class="s0">var </span><span class="s1">option </span><span class="s0">= </span><span class="s1">document</span><span class="s0">.</span><span class="s1">createElement</span><span class="s4">(</span><span class="s3">&quot;option&quot;</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+        option</span><span class="s0">.</span><span class="s1">text </span><span class="s0">= </span><span class="s3">&quot;http://rss.upi.com/news/news.rss&quot;</span><span class="s0">;</span><span class="s1"> 
+        option</span><span class="s0">.</span><span class="s1">value </span><span class="s0">= </span><span class="s3">&quot;http://rss.upi.com/news/news.rss&quot;</span><span class="s0">;</span><span class="s1"> 
+        combo</span><span class="s0">.</span><span class="s1">add</span><span class="s4">(</span><span class="s1">option</span><span class="s0">, null</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+ 
+        </span><span class="s0">var </span><span class="s1">option2 </span><span class="s0">= </span><span class="s1">document</span><span class="s0">.</span><span class="s1">createElement</span><span class="s4">(</span><span class="s3">&quot;option&quot;</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+        option2</span><span class="s0">.</span><span class="s1">text </span><span class="s0">= </span><span class="s3">&quot;http://news.yahoo.com/rss&quot;</span><span class="s0">;</span><span class="s1"> 
+        option2</span><span class="s0">.</span><span class="s1">value </span><span class="s0">= </span><span class="s3">&quot;http://news.yahoo.com/rss&quot;</span><span class="s0">;</span><span class="s1"> 
+        combo</span><span class="s0">.</span><span class="s1">add</span><span class="s4">(</span><span class="s1">option2</span><span class="s0">, null</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+        currentRSS</span><span class="s0">=</span><span class="s3">&quot;http://news.yahoo.com/rss&quot;</span><span class="s0">;</span><span class="s1"> 
+ 
+        </span><span class="s0">var </span><span class="s1">option3 </span><span class="s0">= </span><span class="s1">document</span><span class="s0">.</span><span class="s1">createElement</span><span class="s4">(</span><span class="s3">&quot;option&quot;</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+        option3</span><span class="s0">.</span><span class="s1">text </span><span class="s0">= </span><span class="s3">&quot;http://feeds.wired.com/wired/index&quot;</span><span class="s0">;</span><span class="s1"> 
+        option3</span><span class="s0">.</span><span class="s1">value </span><span class="s0">= </span><span class="s3">&quot;http://feeds.wired.com/wired/index&quot;</span><span class="s0">;</span><span class="s1"> 
+        combo</span><span class="s0">.</span><span class="s1">add</span><span class="s4">(</span><span class="s1">option3</span><span class="s0">, null</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+ 
+        </span><span class="s0">var </span><span class="s1">numberRSSChannels</span><span class="s0">=</span><span class="s6">3</span><span class="s0">;</span><span class="s1"> 
+ 
+        </span><span class="s5">// Create fields for statistics</span><span class="s1"> 
+        </span><span class="s0">var </span><span class="s1">stat1 </span><span class="s0">= </span><span class="s1">document</span><span class="s0">.</span><span class="s1">createElement</span><span class="s4">(</span><span class="s3">&quot;text&quot;</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+        stat1</span><span class="s0">.</span><span class="s1">id</span><span class="s0">=</span><span class="s3">&quot;stat1&quot;</span><span class="s0">;</span><span class="s1"> 
+        stat1</span><span class="s0">.</span><span class="s1">type</span><span class="s0">=</span><span class="s3">&quot;text&quot;</span><span class="s0">;</span><span class="s1"> 
+        stat1</span><span class="s0">.</span><span class="s1">style</span><span class="s0">.</span><span class="s1">position</span><span class="s0">=</span><span class="s3">&quot;absolute&quot;</span><span class="s0">;</span><span class="s1"> 
+        stat1</span><span class="s0">.</span><span class="s1">style</span><span class="s0">.</span><span class="s1">top</span><span class="s0">=</span><span class="s6">40</span><span class="s0">;</span><span class="s1"> 
+        stat1</span><span class="s0">.</span><span class="s1">style</span><span class="s0">.</span><span class="s1">left</span><span class="s0">=</span><span class="s6">490</span><span class="s0">;</span><span class="s1"> 
+        stat1</span><span class="s0">.</span><span class="s1">textContent</span><span class="s0">=</span><span class="s3">&quot;Numbers of RSS Channels &quot; </span><span class="s0">+ </span><span class="s1">numberRSSChannels</span><span class="s0">;</span><span class="s1"> 
+        document</span><span class="s0">.</span><span class="s1">body</span><span class="s0">.</span><span class="s1">appendChild</span><span class="s4">(</span><span class="s1">stat1</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+ 
+        </span><span class="s0">var </span><span class="s1">stat2 </span><span class="s0">= </span><span class="s1">document</span><span class="s0">.</span><span class="s1">createElement</span><span class="s4">(</span><span class="s3">&quot;text&quot;</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+        stat2</span><span class="s0">.</span><span class="s1">id</span><span class="s0">=</span><span class="s3">&quot;stat2&quot;</span><span class="s0">;</span><span class="s1"> 
+        stat2</span><span class="s0">.</span><span class="s1">type</span><span class="s0">=</span><span class="s3">&quot;text&quot;</span><span class="s0">;</span><span class="s1"> 
+        stat2</span><span class="s0">.</span><span class="s1">style</span><span class="s0">.</span><span class="s1">position</span><span class="s0">=</span><span class="s3">&quot;absolute&quot;</span><span class="s0">;</span><span class="s1"> 
+        stat2</span><span class="s0">.</span><span class="s1">style</span><span class="s0">.</span><span class="s1">top</span><span class="s0">=</span><span class="s6">40</span><span class="s0">;</span><span class="s1"> 
+        stat2</span><span class="s0">.</span><span class="s1">style</span><span class="s0">.</span><span class="s1">left</span><span class="s0">=</span><span class="s6">760</span><span class="s0">;</span><span class="s1"> 
+        stat2</span><span class="s0">.</span><span class="s1">textContent</span><span class="s0">=</span><span class="s3">&quot;Numbers of messages &quot; </span><span class="s0">+ </span><span class="s1">count</span><span class="s0">;</span><span class="s1"> 
+        document</span><span class="s0">.</span><span class="s1">body</span><span class="s0">.</span><span class="s1">appendChild</span><span class="s4">(</span><span class="s1">stat2</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+ 
+        </span><span class="s0">var </span><span class="s1">stat3 </span><span class="s0">= </span><span class="s1">document</span><span class="s0">.</span><span class="s1">createElement</span><span class="s4">(</span><span class="s3">&quot;text&quot;</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+        stat3</span><span class="s0">.</span><span class="s1">id</span><span class="s0">=</span><span class="s3">&quot;stat3&quot;</span><span class="s0">;</span><span class="s1"> 
+        stat3</span><span class="s0">.</span><span class="s1">type</span><span class="s0">=</span><span class="s3">&quot;text&quot;</span><span class="s0">;</span><span class="s1"> 
+        stat3</span><span class="s0">.</span><span class="s1">style</span><span class="s0">.</span><span class="s1">position</span><span class="s0">=</span><span class="s3">&quot;absolute&quot;</span><span class="s0">;</span><span class="s1"> 
+        stat3</span><span class="s0">.</span><span class="s1">style</span><span class="s0">.</span><span class="s1">top</span><span class="s0">=</span><span class="s6">40</span><span class="s0">;</span><span class="s1"> 
+        stat3</span><span class="s0">.</span><span class="s1">style</span><span class="s0">.</span><span class="s1">left</span><span class="s0">=</span><span class="s6">990</span><span class="s0">;</span><span class="s1"> 
+        stat3</span><span class="s0">.</span><span class="s1">textContent</span><span class="s0">=</span><span class="s3">&quot;Numbers of authors &quot; </span><span class="s0">+ </span><span class="s1">auth</span><span class="s0">;</span><span class="s1"> 
+        document</span><span class="s0">.</span><span class="s1">body</span><span class="s0">.</span><span class="s1">appendChild</span><span class="s4">(</span><span class="s1">stat3</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+ 
+ 
+    document</span><span class="s0">.</span><span class="s1">getElementById</span><span class="s4">(</span><span class="s3">&quot;combo&quot;</span><span class="s4">)</span><span class="s0">.</span><span class="s1">onmouseout</span><span class="s0">=</span><span class="s1">changeRSS</span><span class="s0">;</span><span class="s1"> 
+ 
+      count</span><span class="s0">=</span><span class="s6">0</span><span class="s0">;</span><span class="s1"> 
+ 
+       </span><span class="s5">//create messages content</span><span class="s1"> 
+       </span><span class="s0">function </span><span class="s1">fillPage</span><span class="s4">(</span><span class="s1">obj</span><span class="s4">) {</span><span class="s1"> 
+ 
+           </span><span class="s0">var </span><span class="s1">rad </span><span class="s0">= </span><span class="s1">document</span><span class="s0">.</span><span class="s1">createElement</span><span class="s4">(</span><span class="s3">&quot;input&quot;</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+           rad</span><span class="s0">.</span><span class="s1">id </span><span class="s0">= </span><span class="s1">count</span><span class="s0">;</span><span class="s1"> 
+           rad</span><span class="s0">.</span><span class="s1">type</span><span class="s0">=</span><span class="s3">&quot;radio&quot;</span><span class="s0">;</span><span class="s1"> 
+           rad</span><span class="s0">.</span><span class="s1">style</span><span class="s0">.</span><span class="s1">position </span><span class="s0">= </span><span class="s3">'absolute'</span><span class="s0">;</span><span class="s1"> 
+           rad</span><span class="s0">.</span><span class="s1">style</span><span class="s0">.</span><span class="s1">top </span><span class="s0">= </span><span class="s6">120</span><span class="s0">+</span><span class="s1">count</span><span class="s0">*</span><span class="s6">30</span><span class="s0">;</span><span class="s1"> 
+           rad</span><span class="s0">.</span><span class="s1">style</span><span class="s0">.</span><span class="s1">left </span><span class="s0">= </span><span class="s6">30</span><span class="s0">;</span><span class="s1"> 
+           rad</span><span class="s0">.</span><span class="s1">textContent</span><span class="s0">=</span><span class="s1">count</span><span class="s0">;</span><span class="s1"> 
+ 
+           document</span><span class="s0">.</span><span class="s1">body</span><span class="s0">.</span><span class="s1">appendChild</span><span class="s4">(</span><span class="s1">rad</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+           document</span><span class="s0">.</span><span class="s1">getElementById</span><span class="s4">(</span><span class="s1">count</span><span class="s4">)</span><span class="s0">.</span><span class="s1">onclick</span><span class="s0">=</span><span class="s1">readText</span><span class="s0">;</span><span class="s1"> 
+ 
+           </span><span class="s0">var </span><span class="s1">rText</span><span class="s0">=</span><span class="s1">document</span><span class="s0">.</span><span class="s1">createElement</span><span class="s4">(</span><span class="s3">&quot;text&quot;</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+           rText</span><span class="s0">.</span><span class="s1">id</span><span class="s0">=</span><span class="s3">&quot;rT&quot;</span><span class="s0">+</span><span class="s1">count</span><span class="s0">;</span><span class="s1"> 
+           rText</span><span class="s0">.</span><span class="s1">type</span><span class="s0">=</span><span class="s3">&quot;text&quot;</span><span class="s0">;</span><span class="s1"> 
+           rText</span><span class="s0">.</span><span class="s1">style</span><span class="s0">.</span><span class="s1">position </span><span class="s0">= </span><span class="s3">'absolute'</span><span class="s0">;</span><span class="s1"> 
+           rText</span><span class="s0">.</span><span class="s1">style</span><span class="s0">.</span><span class="s1">top </span><span class="s0">= </span><span class="s6">120</span><span class="s0">+</span><span class="s1">count</span><span class="s0">*</span><span class="s6">30</span><span class="s0">;</span><span class="s1"> 
+           rText</span><span class="s0">.</span><span class="s1">style</span><span class="s0">.</span><span class="s1">left </span><span class="s0">= </span><span class="s6">55</span><span class="s0">;</span><span class="s1"> 
+           rText</span><span class="s0">.</span><span class="s1">textContent</span><span class="s0">=</span><span class="s3">&quot;&quot;</span><span class="s0">;</span><span class="s1"> 
+           document</span><span class="s0">.</span><span class="s1">body</span><span class="s0">.</span><span class="s1">appendChild</span><span class="s4">(</span><span class="s1">rText</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+ 
+           document</span><span class="s0">.</span><span class="s1">getElementById</span><span class="s4">(</span><span class="s1">count</span><span class="s4">)</span><span class="s0">.</span><span class="s1">textContent</span><span class="s0">=</span><span class="s1">obj</span><span class="s0">.</span><span class="s1">content</span><span class="s0">;</span><span class="s1"> 
+           document</span><span class="s0">.</span><span class="s1">getElementById</span><span class="s4">(</span><span class="s3">&quot;rT&quot;</span><span class="s0">+</span><span class="s1">count</span><span class="s4">)</span><span class="s0">.</span><span class="s1">textContent</span><span class="s0">=</span><span class="s1">obj</span><span class="s0">.</span><span class="s1">title</span><span class="s0">;</span><span class="s1"> 
+ 
+           addAuthor</span><span class="s4">(</span><span class="s1">obj</span><span class="s0">.</span><span class="s1">author</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+ 
+           count</span><span class="s0">++;</span><span class="s1"> 
+       </span><span class="s4">}</span><span class="s1"> 
+ 
+       google</span><span class="s0">.</span><span class="s1">setOnLoadCallback</span><span class="s4">(</span><span class="s1">initialize</span><span class="s4">())</span><span class="s0">;</span><span class="s1"> 
+ 
+ 
+        </span><span class="s5">// Create array like a hash Map to find uniq Autors</span><span class="s1"> 
+    </span><span class="s0">function </span><span class="s1">addAuthor</span><span class="s4">(</span><span class="s1">sName</span><span class="s4">){</span><span class="s1"> 
+        </span><span class="s0">if </span><span class="s4">((</span><span class="s1">sName</span><span class="s0">==</span><span class="s1">undefined</span><span class="s4">)</span><span class="s0">||</span><span class="s4">(</span><span class="s1">sName</span><span class="s0">==</span><span class="s3">&quot;&quot;</span><span class="s4">)){</span><span class="s1"> 
+            </span><span class="s0">return;</span><span class="s1"> 
+        </span><span class="s4">}</span><span class="s1"> 
+ 
+        </span><span class="s0">if </span><span class="s4">(</span><span class="s1">mapAuth</span><span class="s0">.</span><span class="s1">length</span><span class="s0">==</span><span class="s6">0</span><span class="s4">) {</span><span class="s1"> 
+            mapAuth</span><span class="s0">.</span><span class="s1">push</span><span class="s4">(</span><span class="s1">sName</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+            </span><span class="s0">return;</span><span class="s1"> 
+        </span><span class="s4">}</span><span class="s1"> 
+ 
+        </span><span class="s0">if </span><span class="s4">(</span><span class="s1">R</span><span class="s0">.</span><span class="s1">findIndex</span><span class="s4">(</span><span class="s1">sName</span><span class="s0">, </span><span class="s1">mapAuth</span><span class="s4">)</span><span class="s0">&gt;=</span><span class="s6">0</span><span class="s4">){</span><span class="s1"> 
+            </span><span class="s0">return;</span><span class="s1"> 
+        </span><span class="s4">}</span><span class="s1"> 
+</span><span class="s5">//</span><span class="s1"> 
+        mapAuth</span><span class="s0">.</span><span class="s1">push</span><span class="s4">(</span><span class="s1">sName</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+ 
+    </span><span class="s4">}</span><span class="s1"> 
+ 
+ 
+        </span><span class="s5">// Create area for message output</span><span class="s1"> 
+        </span><span class="s0">function </span><span class="s1">addTextArea</span><span class="s4">(){</span><span class="s1"> 
+        </span><span class="s0">var </span><span class="s1">textArea </span><span class="s0">= </span><span class="s1">document</span><span class="s0">.</span><span class="s1">createElement</span><span class="s4">(</span><span class="s3">&quot;box&quot;</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+        textArea</span><span class="s0">.</span><span class="s1">id</span><span class="s0">=</span><span class="s3">&quot;tA&quot;</span><span class="s0">;</span><span class="s1"> 
+        textArea</span><span class="s0">.</span><span class="s1">type</span><span class="s0">=</span><span class="s3">&quot;box&quot;</span><span class="s0">;</span><span class="s1"> 
+        textArea</span><span class="s0">.</span><span class="s1">style</span><span class="s0">.</span><span class="s1">position </span><span class="s0">= </span><span class="s3">'absolute'</span><span class="s0">;</span><span class="s1"> 
+        textArea</span><span class="s0">.</span><span class="s1">style</span><span class="s0">.</span><span class="s1">top </span><span class="s0">=  </span><span class="s6">550 </span><span class="s5">//120+count*30;</span><span class="s1"> 
+        textArea</span><span class="s0">.</span><span class="s1">style</span><span class="s0">.</span><span class="s1">left </span><span class="s0">= </span><span class="s6">850 </span><span class="s5">//40;</span><span class="s1"> 
+        textArea</span><span class="s0">.</span><span class="s1">style</span><span class="s0">.</span><span class="s1">width</span><span class="s0">=</span><span class="s6">400</span><span class="s0">;</span><span class="s1"> 
+        textArea</span><span class="s0">.</span><span class="s1">style</span><span class="s0">.</span><span class="s1">height</span><span class="s0">=</span><span class="s6">400</span><span class="s0">;</span><span class="s1"> 
+        textArea</span><span class="s0">.</span><span class="s1">style</span><span class="s0">.</span><span class="s1">fontSize</span><span class="s0">=</span><span class="s6">20</span><span class="s0">;</span><span class="s1"> 
+        textArea</span><span class="s0">.</span><span class="s1">textContent</span><span class="s0">=</span><span class="s3">&quot;&quot;</span><span class="s0">;</span><span class="s1"> 
+        document</span><span class="s0">.</span><span class="s1">body</span><span class="s0">.</span><span class="s1">appendChild</span><span class="s4">(</span><span class="s1">textArea</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+        document</span><span class="s0">.</span><span class="s1">getElementById</span><span class="s4">(</span><span class="s3">&quot;stat2&quot;</span><span class="s4">)</span><span class="s0">.</span><span class="s1">textContent</span><span class="s0">=</span><span class="s3">&quot;Numbers of messages &quot; </span><span class="s0">+ </span><span class="s1">count</span><span class="s0">;</span><span class="s1"> 
+        document</span><span class="s0">.</span><span class="s1">getElementById</span><span class="s4">(</span><span class="s3">&quot;stat3&quot;</span><span class="s4">)</span><span class="s0">.</span><span class="s1">textContent</span><span class="s0">=</span><span class="s3">&quot;Numbers of authors &quot; </span><span class="s0">+ </span><span class="s1">mapAuth</span><span class="s0">.</span><span class="s1">length</span><span class="s0">;</span><span class="s1"> 
+    </span><span class="s4">}</span><span class="s1"> 
+ 
+        </span><span class="s5">// output text message after chose one</span><span class="s1"> 
+    </span><span class="s0">function </span><span class="s1">readText</span><span class="s4">(){</span><span class="s1"> 
+        </span><span class="s0">this.</span><span class="s1">checked</span><span class="s0">=false;</span><span class="s1"> 
+        document</span><span class="s0">.</span><span class="s1">getElementById</span><span class="s4">(</span><span class="s3">&quot;tA&quot;</span><span class="s4">)</span><span class="s0">.</span><span class="s1">innerHTML </span><span class="s0">= this.</span><span class="s1">textContent</span><span class="s0">;</span><span class="s1"> 
+ 
+        letterCount</span><span class="s4">(</span><span class="s1">document</span><span class="s0">.</span><span class="s1">getElementById</span><span class="s4">(</span><span class="s3">&quot;tA&quot;</span><span class="s4">)</span><span class="s0">.</span><span class="s1">textContent</span><span class="s4">)</span><span class="s1"> 
+ 
+    </span><span class="s4">}</span><span class="s1"> 
+ 
+    </span><span class="s5">// count all kind of letters in message before create graph</span><span class="s1"> 
+    </span><span class="s0">function </span><span class="s1">letterCount</span><span class="s4">(</span><span class="s1">news</span><span class="s4">) {</span><span class="s1"> 
+        </span><span class="s0">var </span><span class="s1">size</span><span class="s0">=</span><span class="s1">news</span><span class="s0">.</span><span class="s1">length</span><span class="s0">;</span><span class="s1"> 
+        </span><span class="s0">var </span><span class="s1">letter </span><span class="s0">= </span><span class="s1">R</span><span class="s0">.</span><span class="s1">split</span><span class="s4">(</span><span class="s3">&quot;&quot;</span><span class="s0">, </span><span class="s1">news</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+        </span><span class="s0">var </span><span class="s1">i</span><span class="s0">=</span><span class="s6">0</span><span class="s0">;</span><span class="s1"> 
+        </span><span class="s0">var let=</span><span class="s4">{</span><span class="s6">0</span><span class="s4">}</span><span class="s0">;</span><span class="s1"> 
+        </span><span class="s0">var </span><span class="s1">alph </span><span class="s0">= </span><span class="s1">R</span><span class="s0">.</span><span class="s1">repeat</span><span class="s4">(</span><span class="s0">let, </span><span class="s1">size</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+ 
+ 
+        i</span><span class="s0">=</span><span class="s6">0</span><span class="s1"> 
+        </span><span class="s0">while </span><span class="s4">(</span><span class="s1">i</span><span class="s0">&lt;</span><span class="s1">size</span><span class="s4">){</span><span class="s1"> 
+ 
+            </span><span class="s0">if</span><span class="s4">((</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;a&quot;</span><span class="s4">)</span><span class="s0">||</span><span class="s4">(</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;A&quot;</span><span class="s4">)) {</span><span class="s1">alph</span><span class="s4">[</span><span class="s6">0</span><span class="s4">]</span><span class="s0">++;</span><span class="s4">}</span><span class="s1"> 
+            </span><span class="s0">if</span><span class="s4">((</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;b&quot;</span><span class="s4">)</span><span class="s0">||</span><span class="s4">(</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;B&quot;</span><span class="s4">)) {</span><span class="s1">alph</span><span class="s4">[</span><span class="s6">1</span><span class="s4">]</span><span class="s0">++;</span><span class="s4">}</span><span class="s1"> 
+            </span><span class="s0">if</span><span class="s4">((</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;c&quot;</span><span class="s4">)</span><span class="s0">||</span><span class="s4">(</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;C&quot;</span><span class="s4">)) {</span><span class="s1">alph</span><span class="s4">[</span><span class="s6">2</span><span class="s4">]</span><span class="s0">++;</span><span class="s4">}</span><span class="s1"> 
+            </span><span class="s0">if</span><span class="s4">((</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;d&quot;</span><span class="s4">)</span><span class="s0">||</span><span class="s4">(</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;D&quot;</span><span class="s4">)) {</span><span class="s1">alph</span><span class="s4">[</span><span class="s6">3</span><span class="s4">]</span><span class="s0">++;</span><span class="s4">}</span><span class="s1"> 
+            </span><span class="s0">if</span><span class="s4">((</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;e&quot;</span><span class="s4">)</span><span class="s0">||</span><span class="s4">(</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;E&quot;</span><span class="s4">)) {</span><span class="s1">alph</span><span class="s4">[</span><span class="s6">4</span><span class="s4">]</span><span class="s0">++;</span><span class="s4">}</span><span class="s1"> 
+            </span><span class="s0">if</span><span class="s4">((</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;f&quot;</span><span class="s4">)</span><span class="s0">||</span><span class="s4">(</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;F&quot;</span><span class="s4">)) {</span><span class="s1">alph</span><span class="s4">[</span><span class="s6">5</span><span class="s4">]</span><span class="s0">++;</span><span class="s4">}</span><span class="s1"> 
+            </span><span class="s0">if</span><span class="s4">((</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;g&quot;</span><span class="s4">)</span><span class="s0">||</span><span class="s4">(</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;G&quot;</span><span class="s4">)) {</span><span class="s1">alph</span><span class="s4">[</span><span class="s6">6</span><span class="s4">]</span><span class="s0">++;</span><span class="s4">}</span><span class="s1"> 
+            </span><span class="s0">if</span><span class="s4">((</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;h&quot;</span><span class="s4">)</span><span class="s0">||</span><span class="s4">(</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;H&quot;</span><span class="s4">)) {</span><span class="s1">alph</span><span class="s4">[</span><span class="s6">7</span><span class="s4">]</span><span class="s0">++;</span><span class="s4">}</span><span class="s1"> 
+            </span><span class="s0">if</span><span class="s4">((</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;i&quot;</span><span class="s4">)</span><span class="s0">||</span><span class="s4">(</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;I&quot;</span><span class="s4">)) {</span><span class="s1">alph</span><span class="s4">[</span><span class="s6">8</span><span class="s4">]</span><span class="s0">++;</span><span class="s4">}</span><span class="s1"> 
+            </span><span class="s0">if</span><span class="s4">((</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;j&quot;</span><span class="s4">)</span><span class="s0">||</span><span class="s4">(</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;J&quot;</span><span class="s4">)) {</span><span class="s1">alph</span><span class="s4">[</span><span class="s6">9</span><span class="s4">]</span><span class="s0">++;</span><span class="s4">}</span><span class="s1"> 
+            </span><span class="s0">if</span><span class="s4">((</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;k&quot;</span><span class="s4">)</span><span class="s0">||</span><span class="s4">(</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;K&quot;</span><span class="s4">)) {</span><span class="s1">alph</span><span class="s4">[</span><span class="s6">10</span><span class="s4">]</span><span class="s0">++;</span><span class="s4">}</span><span class="s1"> 
+            </span><span class="s0">if</span><span class="s4">((</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;l&quot;</span><span class="s4">)</span><span class="s0">||</span><span class="s4">(</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;L&quot;</span><span class="s4">)) {</span><span class="s1">alph</span><span class="s4">[</span><span class="s6">11</span><span class="s4">]</span><span class="s0">++;</span><span class="s4">}</span><span class="s1"> 
+            </span><span class="s0">if</span><span class="s4">((</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;m&quot;</span><span class="s4">)</span><span class="s0">||</span><span class="s4">(</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;M&quot;</span><span class="s4">)) {</span><span class="s1">alph</span><span class="s4">[</span><span class="s6">12</span><span class="s4">]</span><span class="s0">++;</span><span class="s4">}</span><span class="s1"> 
+            </span><span class="s0">if</span><span class="s4">((</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;n&quot;</span><span class="s4">)</span><span class="s0">||</span><span class="s4">(</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;N&quot;</span><span class="s4">)) {</span><span class="s1">alph</span><span class="s4">[</span><span class="s6">13</span><span class="s4">]</span><span class="s0">++;</span><span class="s4">}</span><span class="s1"> 
+            </span><span class="s0">if</span><span class="s4">((</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;o&quot;</span><span class="s4">)</span><span class="s0">||</span><span class="s4">(</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;O&quot;</span><span class="s4">)) {</span><span class="s1">alph</span><span class="s4">[</span><span class="s6">14</span><span class="s4">]</span><span class="s0">++;</span><span class="s4">}</span><span class="s1"> 
+            </span><span class="s0">if</span><span class="s4">((</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;p&quot;</span><span class="s4">)</span><span class="s0">||</span><span class="s4">(</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;P&quot;</span><span class="s4">)) {</span><span class="s1">alph</span><span class="s4">[</span><span class="s6">15</span><span class="s4">]</span><span class="s0">++;</span><span class="s4">}</span><span class="s1"> 
+            </span><span class="s0">if</span><span class="s4">((</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;q&quot;</span><span class="s4">)</span><span class="s0">||</span><span class="s4">(</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;Q&quot;</span><span class="s4">)) {</span><span class="s1">alph</span><span class="s4">[</span><span class="s6">16</span><span class="s4">]</span><span class="s0">++;</span><span class="s4">}</span><span class="s1"> 
+            </span><span class="s0">if</span><span class="s4">((</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;r&quot;</span><span class="s4">)</span><span class="s0">||</span><span class="s4">(</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;R&quot;</span><span class="s4">)) {</span><span class="s1">alph</span><span class="s4">[</span><span class="s6">17</span><span class="s4">]</span><span class="s0">++;</span><span class="s4">}</span><span class="s1"> 
+            </span><span class="s0">if</span><span class="s4">((</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;s&quot;</span><span class="s4">)</span><span class="s0">||</span><span class="s4">(</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;S&quot;</span><span class="s4">)) {</span><span class="s1">alph</span><span class="s4">[</span><span class="s6">18</span><span class="s4">]</span><span class="s0">++;</span><span class="s4">}</span><span class="s1"> 
+            </span><span class="s0">if</span><span class="s4">((</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;t&quot;</span><span class="s4">)</span><span class="s0">||</span><span class="s4">(</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;T&quot;</span><span class="s4">)) {</span><span class="s1">alph</span><span class="s4">[</span><span class="s6">19</span><span class="s4">]</span><span class="s0">++;</span><span class="s4">}</span><span class="s1"> 
+            </span><span class="s0">if</span><span class="s4">((</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;u&quot;</span><span class="s4">)</span><span class="s0">||</span><span class="s4">(</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;U&quot;</span><span class="s4">)) {</span><span class="s1">alph</span><span class="s4">[</span><span class="s6">20</span><span class="s4">]</span><span class="s0">++;</span><span class="s4">}</span><span class="s1"> 
+            </span><span class="s0">if</span><span class="s4">((</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;v&quot;</span><span class="s4">)</span><span class="s0">||</span><span class="s4">(</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;V&quot;</span><span class="s4">)) {</span><span class="s1">alph</span><span class="s4">[</span><span class="s6">21</span><span class="s4">]</span><span class="s0">++;</span><span class="s4">}</span><span class="s1"> 
+            </span><span class="s0">if</span><span class="s4">((</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;w&quot;</span><span class="s4">)</span><span class="s0">||</span><span class="s4">(</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;W&quot;</span><span class="s4">)) {</span><span class="s1">alph</span><span class="s4">[</span><span class="s6">22</span><span class="s4">]</span><span class="s0">++;</span><span class="s4">}</span><span class="s1"> 
+            </span><span class="s0">if</span><span class="s4">((</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;x&quot;</span><span class="s4">)</span><span class="s0">||</span><span class="s4">(</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;X&quot;</span><span class="s4">)) {</span><span class="s1">alph</span><span class="s4">[</span><span class="s6">23</span><span class="s4">]</span><span class="s0">++;</span><span class="s4">}</span><span class="s1"> 
+            </span><span class="s0">if</span><span class="s4">((</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;y&quot;</span><span class="s4">)</span><span class="s0">||</span><span class="s4">(</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;Y&quot;</span><span class="s4">)) {</span><span class="s1">alph</span><span class="s4">[</span><span class="s6">24</span><span class="s4">]</span><span class="s0">++;</span><span class="s4">}</span><span class="s1"> 
+            </span><span class="s0">if</span><span class="s4">((</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;z&quot;</span><span class="s4">)</span><span class="s0">||</span><span class="s4">(</span><span class="s1">letter</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">==</span><span class="s3">&quot;Z&quot;</span><span class="s4">)) {</span><span class="s1">alph</span><span class="s4">[</span><span class="s6">25</span><span class="s4">]</span><span class="s0">++;</span><span class="s4">}</span><span class="s1"> 
+ 
+            i</span><span class="s0">++;</span><span class="s1"> 
+        </span><span class="s4">}</span><span class="s1"> 
+ 
+        i</span><span class="s0">=</span><span class="s6">0</span><span class="s0">;</span><span class="s1"> 
+        </span><span class="s0">var </span><span class="s1">result</span><span class="s0">=</span><span class="s6">0</span><span class="s0">;</span><span class="s1"> 
+        </span><span class="s0">while</span><span class="s4">(</span><span class="s1">i</span><span class="s0">&lt;</span><span class="s6">26</span><span class="s4">){</span><span class="s1"> 
+ 
+            result</span><span class="s0">+=</span><span class="s1">alph</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">;</span><span class="s1"> 
+            i</span><span class="s0">++;</span><span class="s1"> 
+        </span><span class="s4">}</span><span class="s1"> 
+ 
+        alph</span><span class="s4">[</span><span class="s6">26</span><span class="s4">]</span><span class="s0">=</span><span class="s1">size</span><span class="s0">-</span><span class="s1">result</span><span class="s0">; </span><span class="s5">//alph[26] = numbers of nonLetter</span><span class="s1"> 
+ 
+        drawMyChart</span><span class="s4">(</span><span class="s1">alph</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+ 
+    </span><span class="s4">}</span><span class="s1"> 
+ 
+    </span><span class="s5">// Change RSS Channel</span><span class="s1"> 
+ 
+    </span><span class="s0">function </span><span class="s1">changeRSS</span><span class="s4">(){</span><span class="s1"> 
+ 
+        </span><span class="s0">if</span><span class="s4">(</span><span class="s1">currentRSS</span><span class="s0">==</span><span class="s1">document</span><span class="s0">.</span><span class="s1">getElementById</span><span class="s4">(</span><span class="s3">&quot;combo&quot;</span><span class="s4">)</span><span class="s0">.</span><span class="s1">value</span><span class="s4">){</span><span class="s1"> 
+            </span><span class="s0">return;</span><span class="s1"> 
+        </span><span class="s4">}</span><span class="s1"> 
+ 
+        currentRSS</span><span class="s0">=</span><span class="s1">document</span><span class="s0">.</span><span class="s1">getElementById</span><span class="s4">(</span><span class="s3">&quot;combo&quot;</span><span class="s4">)</span><span class="s0">.</span><span class="s1">value</span><span class="s0">;</span><span class="s1"> 
+ 
+ 
+        </span><span class="s0">try</span><span class="s4">{</span><span class="s1"> 
+        document</span><span class="s0">.</span><span class="s1">body</span><span class="s0">.</span><span class="s1">removeChild</span><span class="s4">(</span><span class="s1">document</span><span class="s0">.</span><span class="s1">getElementById</span><span class="s4">(</span><span class="s3">&quot;tA&quot;</span><span class="s4">))</span><span class="s0">;</span><span class="s4">}</span><span class="s1"> 
+        </span><span class="s0">catch</span><span class="s4">(</span><span class="s1">exept</span><span class="s4">) {}</span><span class="s0">;</span><span class="s1"> 
+        </span><span class="s0">var </span><span class="s1">i</span><span class="s0">=</span><span class="s6">0</span><span class="s0">;</span><span class="s1"> 
+        </span><span class="s0">while </span><span class="s4">(</span><span class="s1">i</span><span class="s0">&lt;</span><span class="s1">count</span><span class="s4">) {</span><span class="s1"> 
+            document</span><span class="s0">.</span><span class="s1">body</span><span class="s0">.</span><span class="s1">removeChild</span><span class="s4">(</span><span class="s1">document</span><span class="s0">.</span><span class="s1">getElementById</span><span class="s4">(</span><span class="s1">i</span><span class="s4">))</span><span class="s0">;</span><span class="s1"> 
+            document</span><span class="s0">.</span><span class="s1">body</span><span class="s0">.</span><span class="s1">removeChild</span><span class="s4">(</span><span class="s1">document</span><span class="s0">.</span><span class="s1">getElementById</span><span class="s4">(</span><span class="s3">&quot;rT&quot;</span><span class="s0">+</span><span class="s1">i</span><span class="s4">))</span><span class="s0">;</span><span class="s1"> 
+            i</span><span class="s0">++;</span><span class="s1"> 
+        </span><span class="s4">}</span><span class="s1"> 
+ 
+        document</span><span class="s0">.</span><span class="s1">getElementById</span><span class="s4">(</span><span class="s3">&quot;chartContainer&quot;</span><span class="s4">)</span><span class="s0">.</span><span class="s1">style</span><span class="s0">.</span><span class="s1">display</span><span class="s0">=</span><span class="s3">&quot;none&quot;</span><span class="s0">;</span><span class="s1"> 
+        google</span><span class="s0">.</span><span class="s1">setOnLoadCallback</span><span class="s4">(</span><span class="s1">initialize</span><span class="s4">())</span><span class="s0">;</span><span class="s1"> 
+    </span><span class="s4">}</span><span class="s1"> 
+ 
+ 
+        </span><span class="s0">function </span><span class="s1">delCombo</span><span class="s4">() {</span><span class="s1"> 
+            </span><span class="s0">var </span><span class="s1">combo </span><span class="s0">= </span><span class="s1">document</span><span class="s0">.</span><span class="s1">getElementById</span><span class="s4">(</span><span class="s3">&quot;combo&quot;</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+            </span><span class="s0">var </span><span class="s1">options </span><span class="s0">= </span><span class="s1">combo</span><span class="s0">.</span><span class="s1">options</span><span class="s0">;</span><span class="s1"> 
+            </span><span class="s0">var </span><span class="s1">index </span><span class="s0">= </span><span class="s1">R</span><span class="s0">.</span><span class="s1">findIndex</span><span class="s4">(</span><span class="s1">currentRSS</span><span class="s0">,</span><span class="s1">options</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+            combo</span><span class="s0">.</span><span class="s1">removeChild</span><span class="s4">(</span><span class="s1">options</span><span class="s4">[</span><span class="s1">index</span><span class="s4">])</span><span class="s1"> 
+ 
+ 
+            numberRSSChannels</span><span class="s0">--;</span><span class="s1"> 
+            document</span><span class="s0">.</span><span class="s1">getElementById</span><span class="s4">(</span><span class="s3">&quot;stat1&quot;</span><span class="s4">)</span><span class="s0">.</span><span class="s1">textContent</span><span class="s0">=</span><span class="s3">&quot;Numbers of RSS Channels &quot; </span><span class="s0">+ </span><span class="s1">numberRSSChannels</span><span class="s0">;</span><span class="s1"> 
+            document</span><span class="s0">.</span><span class="s1">getElementById</span><span class="s4">(</span><span class="s3">&quot;combo&quot;</span><span class="s4">)</span><span class="s0">.</span><span class="s1">value</span><span class="s0">=</span><span class="s3">&quot;&quot;</span><span class="s0">;</span><span class="s1"> 
+            currentRSS</span><span class="s0">=</span><span class="s3">&quot;&quot;</span><span class="s0">;</span><span class="s1"> 
+            changeRSS</span><span class="s4">()</span><span class="s0">;</span><span class="s1"> 
+        </span><span class="s4">}</span><span class="s1"> 
+ 
+ 
+ 
+ 
+ 
+</span><span class="s5">// Add new url for new Channel</span><span class="s1"> 
+    </span><span class="s0">function </span><span class="s1">addCombo</span><span class="s4">() {</span><span class="s1"> 
+        </span><span class="s0">if </span><span class="s4">(</span><span class="s1">document</span><span class="s0">.</span><span class="s1">getElementById</span><span class="s4">(</span><span class="s3">&quot;txtCombo&quot;</span><span class="s4">)</span><span class="s0">.</span><span class="s1">value</span><span class="s0">==</span><span class="s3">&quot;&quot;</span><span class="s4">){</span><span class="s1"> 
+            </span><span class="s0">return;</span><span class="s1"> 
+        </span><span class="s4">}</span><span class="s1"> 
+        </span><span class="s0">var </span><span class="s1">textb </span><span class="s0">= </span><span class="s1">document</span><span class="s0">.</span><span class="s1">getElementById</span><span class="s4">(</span><span class="s3">&quot;txtCombo&quot;</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+        </span><span class="s0">var </span><span class="s1">combo </span><span class="s0">= </span><span class="s1">document</span><span class="s0">.</span><span class="s1">getElementById</span><span class="s4">(</span><span class="s3">&quot;combo&quot;</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+ 
+        </span><span class="s0">var </span><span class="s1">option </span><span class="s0">= </span><span class="s1">document</span><span class="s0">.</span><span class="s1">createElement</span><span class="s4">(</span><span class="s3">&quot;option&quot;</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+        option</span><span class="s0">.</span><span class="s1">text </span><span class="s0">= </span><span class="s1">textb</span><span class="s0">.</span><span class="s1">value</span><span class="s0">;</span><span class="s1"> 
+        option</span><span class="s0">.</span><span class="s1">value </span><span class="s0">= </span><span class="s1">textb</span><span class="s0">.</span><span class="s1">value</span><span class="s0">;</span><span class="s1"> 
+        </span><span class="s0">try </span><span class="s4">{</span><span class="s1"> 
+            combo</span><span class="s0">.</span><span class="s1">add</span><span class="s4">(</span><span class="s1">option</span><span class="s0">, null</span><span class="s4">)</span><span class="s0">; </span><span class="s5">//Standard</span><span class="s1"> 
+        </span><span class="s4">}</span><span class="s0">catch</span><span class="s4">(</span><span class="s1">error</span><span class="s4">) {</span><span class="s1"> 
+            combo</span><span class="s0">.</span><span class="s1">add</span><span class="s4">(</span><span class="s1">option</span><span class="s4">)</span><span class="s0">; </span><span class="s5">// IE only</span><span class="s1"> 
+        </span><span class="s4">}</span><span class="s1"> 
+        textb</span><span class="s0">.</span><span class="s1">value </span><span class="s0">= </span><span class="s3">&quot;&quot;</span><span class="s0">;</span><span class="s1"> 
+        numberRSSChannels</span><span class="s0">++;</span><span class="s1"> 
+        document</span><span class="s0">.</span><span class="s1">getElementById</span><span class="s4">(</span><span class="s3">&quot;stat1&quot;</span><span class="s4">)</span><span class="s0">.</span><span class="s1">textContent</span><span class="s0">=</span><span class="s3">&quot;Numbers of RSS Channels &quot; </span><span class="s0">+ </span><span class="s1">numberRSSChannels</span><span class="s0">;</span><span class="s1"> 
+    </span><span class="s4">}</span><span class="s1"> 
+ 
+ 
+        </span><span class="s5">// google feed</span><span class="s1"> 
+       </span><span class="s0">function </span><span class="s1">initialize</span><span class="s4">() {</span><span class="s1"> 
+ 
+           count</span><span class="s0">=</span><span class="s6">0</span><span class="s0">;</span><span class="s1"> 
+           mapAuth</span><span class="s0">.</span><span class="s1">length</span><span class="s0">=</span><span class="s6">0</span><span class="s0">;</span><span class="s1"> 
+ 
+           </span><span class="s0">var </span><span class="s1">feed </span><span class="s0">= new </span><span class="s1">google</span><span class="s0">.</span><span class="s1">feeds</span><span class="s0">.</span><span class="s1">Feed</span><span class="s4">(</span><span class="s1">currentRSS</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+           feed</span><span class="s0">.</span><span class="s1">setNumEntries</span><span class="s4">(</span><span class="s6">100</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+           feed</span><span class="s0">.</span><span class="s1">setResultFormat</span><span class="s4">(</span><span class="s1">google</span><span class="s0">.</span><span class="s1">feeds</span><span class="s0">.</span><span class="s1">Feed</span><span class="s0">.</span><span class="s1">MIXED_FORMAT</span><span class="s4">)</span><span class="s1"> 
+           feed</span><span class="s0">.</span><span class="s1">load</span><span class="s4">(</span><span class="s0">function</span><span class="s4">(</span><span class="s1">result</span><span class="s4">) {</span><span class="s1"> 
+                </span><span class="s0">if </span><span class="s4">(</span><span class="s0">!</span><span class="s1">result</span><span class="s0">.</span><span class="s1">error</span><span class="s4">) {</span><span class="s1"> 
+ 
+                    </span><span class="s0">for </span><span class="s4">(</span><span class="s0">var </span><span class="s1">i </span><span class="s0">= </span><span class="s6">0</span><span class="s0">; </span><span class="s1">i </span><span class="s0">&lt; </span><span class="s1">result</span><span class="s0">.</span><span class="s1">feed</span><span class="s0">.</span><span class="s1">entries</span><span class="s0">.</span><span class="s1">length</span><span class="s0">; </span><span class="s1">i</span><span class="s0">++</span><span class="s4">) {</span><span class="s1"> 
+                        </span><span class="s0">var </span><span class="s1">entry </span><span class="s0">= </span><span class="s1">result</span><span class="s0">.</span><span class="s1">feed</span><span class="s0">.</span><span class="s1">entries</span><span class="s4">[</span><span class="s1">i</span><span class="s4">]</span><span class="s0">;</span><span class="s1"> 
+                        fillPage</span><span class="s4">(</span><span class="s1">entry</span><span class="s4">)</span><span class="s0">;</span><span class="s1"> 
+ 
+                    </span><span class="s4">}</span><span class="s1"> 
+                    addTextArea</span><span class="s4">()</span><span class="s0">;</span><span class="s1"> 
+                </span><span class="s4">}</span><span class="s1"> 
+            </span><span class="s4">})</span><span class="s0">;</span><span class="s1"> 
+       </span><span class="s4">}</span><span class="s1"> 
+ 
+ 
+ 
+        </span><span class="s5">// create graph with Canavas.JS</span><span class="s1"> 
+        </span><span class="s0">function </span><span class="s1">drawMyChart </span><span class="s4">(</span><span class="s1">data</span><span class="s4">) {</span><span class="s1"> 
+ 
+            </span><span class="s0">var </span><span class="s1">chart </span><span class="s0">= new </span><span class="s1">CanvasJS</span><span class="s0">.</span><span class="s1">Chart</span><span class="s4">(</span><span class="s3">&quot;chartContainer&quot;</span><span class="s0">, </span><span class="s4">{</span><span class="s1"> 
+                title</span><span class="s0">:</span><span class="s4">{</span><span class="s1"> 
+                    text</span><span class="s0">: </span><span class="s3">&quot;Letters &quot;</span><span class="s1"> 
+                </span><span class="s4">}</span><span class="s0">,</span><span class="s1"> 
+                data</span><span class="s0">: </span><span class="s4">[</span><span class="s1"> 
+                    </span><span class="s4">{</span><span class="s1"> 
+                        </span><span class="s5">// Change type to &quot;doughnut&quot;, &quot;line&quot;, &quot;splineArea&quot;, etc.§</span><span class="s1"> 
+                        type</span><span class="s0">: </span><span class="s3">&quot;doughnut&quot;</span><span class="s0">,</span><span class="s1"> 
+                        dataPoints</span><span class="s0">: </span><span class="s4">[</span><span class="s1"> 
+                            </span><span class="s4">{ </span><span class="s1">label</span><span class="s0">: </span><span class="s3">&quot;a&quot;</span><span class="s0">,  </span><span class="s1">y</span><span class="s0">: </span><span class="s1">data</span><span class="s4">[</span><span class="s6">0</span><span class="s4">]  }</span><span class="s0">,</span><span class="s1"> 
+                            </span><span class="s4">{ </span><span class="s1">label</span><span class="s0">: </span><span class="s3">&quot;b&quot;</span><span class="s0">,  </span><span class="s1">y</span><span class="s0">: </span><span class="s1">data</span><span class="s4">[</span><span class="s6">1</span><span class="s4">]  }</span><span class="s0">,</span><span class="s1"> 
+                            </span><span class="s4">{ </span><span class="s1">label</span><span class="s0">: </span><span class="s3">&quot;c&quot;</span><span class="s0">,  </span><span class="s1">y</span><span class="s0">: </span><span class="s1">data</span><span class="s4">[</span><span class="s6">2</span><span class="s4">]  }</span><span class="s0">,</span><span class="s1"> 
+                            </span><span class="s4">{ </span><span class="s1">label</span><span class="s0">: </span><span class="s3">&quot;d&quot;</span><span class="s0">,  </span><span class="s1">y</span><span class="s0">: </span><span class="s1">data</span><span class="s4">[</span><span class="s6">3</span><span class="s4">]  }</span><span class="s0">,</span><span class="s1"> 
+                            </span><span class="s4">{ </span><span class="s1">label</span><span class="s0">: </span><span class="s3">&quot;e&quot;</span><span class="s0">,  </span><span class="s1">y</span><span class="s0">: </span><span class="s1">data</span><span class="s4">[</span><span class="s6">4</span><span class="s4">]  }</span><span class="s0">,</span><span class="s1"> 
+                            </span><span class="s4">{ </span><span class="s1">label</span><span class="s0">: </span><span class="s3">&quot;f&quot;</span><span class="s0">,  </span><span class="s1">y</span><span class="s0">: </span><span class="s1">data</span><span class="s4">[</span><span class="s6">5</span><span class="s4">]  }</span><span class="s0">,</span><span class="s1"> 
+                            </span><span class="s4">{ </span><span class="s1">label</span><span class="s0">: </span><span class="s3">&quot;g&quot;</span><span class="s0">,  </span><span class="s1">y</span><span class="s0">: </span><span class="s1">data</span><span class="s4">[</span><span class="s6">6</span><span class="s4">]  }</span><span class="s0">,</span><span class="s1"> 
+                            </span><span class="s4">{ </span><span class="s1">label</span><span class="s0">: </span><span class="s3">&quot;h&quot;</span><span class="s0">,  </span><span class="s1">y</span><span class="s0">: </span><span class="s1">data</span><span class="s4">[</span><span class="s6">7</span><span class="s4">]  }</span><span class="s0">,</span><span class="s1"> 
+                            </span><span class="s4">{ </span><span class="s1">label</span><span class="s0">: </span><span class="s3">&quot;i&quot;</span><span class="s0">,  </span><span class="s1">y</span><span class="s0">: </span><span class="s1">data</span><span class="s4">[</span><span class="s6">8</span><span class="s4">]  }</span><span class="s0">,</span><span class="s1"> 
+                            </span><span class="s4">{ </span><span class="s1">label</span><span class="s0">: </span><span class="s3">&quot;j&quot;</span><span class="s0">,  </span><span class="s1">y</span><span class="s0">: </span><span class="s1">data</span><span class="s4">[</span><span class="s6">9</span><span class="s4">]  }</span><span class="s0">,</span><span class="s1"> 
+                            </span><span class="s4">{ </span><span class="s1">label</span><span class="s0">: </span><span class="s3">&quot;k&quot;</span><span class="s0">,  </span><span class="s1">y</span><span class="s0">: </span><span class="s1">data</span><span class="s4">[</span><span class="s6">10</span><span class="s4">]  }</span><span class="s0">,</span><span class="s1"> 
+                            </span><span class="s4">{ </span><span class="s1">label</span><span class="s0">: </span><span class="s3">&quot;l&quot;</span><span class="s0">,  </span><span class="s1">y</span><span class="s0">: </span><span class="s1">data</span><span class="s4">[</span><span class="s6">11</span><span class="s4">]  }</span><span class="s0">,</span><span class="s1"> 
+                            </span><span class="s4">{ </span><span class="s1">label</span><span class="s0">: </span><span class="s3">&quot;m&quot;</span><span class="s0">,  </span><span class="s1">y</span><span class="s0">: </span><span class="s1">data</span><span class="s4">[</span><span class="s6">12</span><span class="s4">]  }</span><span class="s0">,</span><span class="s1"> 
+                            </span><span class="s4">{ </span><span class="s1">label</span><span class="s0">: </span><span class="s3">&quot;n&quot;</span><span class="s0">,  </span><span class="s1">y</span><span class="s0">: </span><span class="s1">data</span><span class="s4">[</span><span class="s6">13</span><span class="s4">]  }</span><span class="s0">,</span><span class="s1"> 
+                            </span><span class="s4">{ </span><span class="s1">label</span><span class="s0">: </span><span class="s3">&quot;o&quot;</span><span class="s0">,  </span><span class="s1">y</span><span class="s0">: </span><span class="s1">data</span><span class="s4">[</span><span class="s6">14</span><span class="s4">]  }</span><span class="s0">,</span><span class="s1"> 
+                            </span><span class="s4">{ </span><span class="s1">label</span><span class="s0">: </span><span class="s3">&quot;p&quot;</span><span class="s0">,  </span><span class="s1">y</span><span class="s0">: </span><span class="s1">data</span><span class="s4">[</span><span class="s6">15</span><span class="s4">]  }</span><span class="s0">,</span><span class="s1"> 
+                            </span><span class="s4">{ </span><span class="s1">label</span><span class="s0">: </span><span class="s3">&quot;q&quot;</span><span class="s0">,  </span><span class="s1">y</span><span class="s0">: </span><span class="s1">data</span><span class="s4">[</span><span class="s6">16</span><span class="s4">]  }</span><span class="s0">,</span><span class="s1"> 
+                            </span><span class="s4">{ </span><span class="s1">label</span><span class="s0">: </span><span class="s3">&quot;r&quot;</span><span class="s0">,  </span><span class="s1">y</span><span class="s0">: </span><span class="s1">data</span><span class="s4">[</span><span class="s6">17</span><span class="s4">]  }</span><span class="s0">,</span><span class="s1"> 
+                            </span><span class="s4">{ </span><span class="s1">label</span><span class="s0">: </span><span class="s3">&quot;s&quot;</span><span class="s0">,  </span><span class="s1">y</span><span class="s0">: </span><span class="s1">data</span><span class="s4">[</span><span class="s6">18</span><span class="s4">]  }</span><span class="s0">,</span><span class="s1"> 
+                            </span><span class="s4">{ </span><span class="s1">label</span><span class="s0">: </span><span class="s3">&quot;t&quot;</span><span class="s0">,  </span><span class="s1">y</span><span class="s0">: </span><span class="s1">data</span><span class="s4">[</span><span class="s6">19</span><span class="s4">]  }</span><span class="s0">,</span><span class="s1"> 
+                            </span><span class="s4">{ </span><span class="s1">label</span><span class="s0">: </span><span class="s3">&quot;u&quot;</span><span class="s0">,  </span><span class="s1">y</span><span class="s0">: </span><span class="s1">data</span><span class="s4">[</span><span class="s6">20</span><span class="s4">]  }</span><span class="s0">,</span><span class="s1"> 
+                            </span><span class="s4">{ </span><span class="s1">label</span><span class="s0">: </span><span class="s3">&quot;v&quot;</span><span class="s0">,  </span><span class="s1">y</span><span class="s0">: </span><span class="s1">data</span><span class="s4">[</span><span class="s6">21</span><span class="s4">]  }</span><span class="s0">,</span><span class="s1"> 
+                            </span><span class="s4">{ </span><span class="s1">label</span><span class="s0">: </span><span class="s3">&quot;w&quot;</span><span class="s0">,  </span><span class="s1">y</span><span class="s0">: </span><span class="s1">data</span><span class="s4">[</span><span class="s6">22</span><span class="s4">]  }</span><span class="s0">,</span><span class="s1"> 
+                            </span><span class="s4">{ </span><span class="s1">label</span><span class="s0">: </span><span class="s3">&quot;x&quot;</span><span class="s0">,  </span><span class="s1">y</span><span class="s0">: </span><span class="s1">data</span><span class="s4">[</span><span class="s6">23</span><span class="s4">]  }</span><span class="s0">,</span><span class="s1"> 
+                            </span><span class="s4">{ </span><span class="s1">label</span><span class="s0">: </span><span class="s3">&quot;y&quot;</span><span class="s0">,  </span><span class="s1">y</span><span class="s0">: </span><span class="s1">data</span><span class="s4">[</span><span class="s6">24</span><span class="s4">]  }</span><span class="s0">,</span><span class="s1"> 
+                            </span><span class="s4">{ </span><span class="s1">label</span><span class="s0">: </span><span class="s3">&quot;z&quot;</span><span class="s0">,  </span><span class="s1">y</span><span class="s0">: </span><span class="s1">data</span><span class="s4">[</span><span class="s6">25</span><span class="s4">]  }</span><span class="s0">,</span><span class="s1"> 
+                          </span><span class="s5">//  { label: &quot;Simbols&quot;,  y: data[26]  },</span><span class="s1"> 
+ 
+ 
+                        </span><span class="s4">]</span><span class="s1"> 
+                    </span><span class="s4">}</span><span class="s1"> 
+                </span><span class="s4">]</span><span class="s1"> 
+            </span><span class="s4">})</span><span class="s0">;</span><span class="s1"> 
+ 
+            chart</span><span class="s0">.</span><span class="s1">render</span><span class="s4">()</span><span class="s0">;</span><span class="s1"> 
+            document</span><span class="s0">.</span><span class="s1">getElementById</span><span class="s4">(</span><span class="s3">&quot;chartContainer&quot;</span><span class="s4">)</span><span class="s0">.</span><span class="s1">style</span><span class="s0">.</span><span class="s1">display</span><span class="s0">=</span><span class="s3">&quot;block&quot;</span><span class="s0">;</span><span class="s1"> 
+        </span><span class="s4">}</span><span class="s1"> 
+ 
+    </span><span class="s0">&lt;/script&gt;</span><span class="s1"> 
+ 
+ 
+ 
+ 
+</span><span class="s0">&lt;div </span><span class="s2">id=</span><span class="s3">&quot;chartContainer&quot; </span><span class="s2">style=</span><span class="s3">&quot;</span><span class="s2">height</span><span class="s1">: </span><span class="s6">400</span><span class="s3">px</span><span class="s0">; </span><span class="s2">width</span><span class="s1">: </span><span class="s6">400</span><span class="s3">px</span><span class="s0">;  </span><span class="s2">position</span><span class="s1">: </span><span class="s3">absolute</span><span class="s0">; </span><span class="s2">top</span><span class="s1">:</span><span class="s6">140</span><span class="s3">px</span><span class="s0">; </span><span class="s2">left</span><span class="s1">: </span><span class="s6">800</span><span class="s3">px</span><span class="s0">;</span><span class="s3">&quot;</span><span class="s0">&gt;&lt;/div&gt;</span><span class="s1"> 
+ 
+ 
+</span><span class="s0">&lt;/body&gt;</span><span class="s1"> 
+</span><span class="s0">&lt;/html&gt;</span></pre>
+</body>
+</html>
